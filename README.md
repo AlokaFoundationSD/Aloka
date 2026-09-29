@@ -73,11 +73,16 @@ GitHub-specific files already in `site/`:
 
 ### Deploy steps
 
-1. Create a GitHub account (free) and a new **public** repository (Pages on a free
-   account requires a public repo). Do not let GitHub add a README, `.gitignore`, or
-   license — the repository must start empty.
-2. Push this whole project to the repository on the `main` branch (the workflow picks
-   `site/` out of it):
+1. Create a GitHub account (free) if there isn't one yet.
+2. Get this project onto GitHub as a **public** repository on the `main` branch (Pages
+   on a free account requires a public repo). The workflow picks `site/` out of it.
+
+   **Using GitHub Desktop:** File → Add Local Repository → choose this folder, then
+   click **Publish repository**. In the dialog, **untick "Keep this code private"** —
+   it is ticked by default, and a private repo disables free Pages.
+
+   **Using the command line:** create a new empty repository on GitHub first (no
+   README, `.gitignore`, or license), then:
 
    ```bash
    cd "/Users/.../Aloka"
