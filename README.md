@@ -1,8 +1,6 @@
 # The Aloka Foundation — Website
 
-A standalone website for **The Aloka Foundation**, independent of the Life Works site where
-the foundation's page currently lives. The site is pure static HTML/CSS/JS — no build step,
-no framework, no server required — so it can be hosted anywhere for free.
+A standalone website for **The Aloka Foundation**. The site is pure static HTML/CSS/JS.
 
 ## What's inside
 
