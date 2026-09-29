@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Dropbox
+.dropbox
+.dropbox.attr
+*.sb-*
+
+# Editors
+.vscode/
+*.swp
+
+# Private scratchpad: draft bios and project notes. The Pages repository is
+# public, so these must never be committed.
+scratchpad/

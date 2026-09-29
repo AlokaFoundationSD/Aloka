@@ -1,0 +1,632 @@
+/* ============================================================
+   The Aloka Foundation — style.css
+   Palette drawn from the Aloka Foundation logo:
+   warm cream, deep brown, golden amber, teal water.
+   ============================================================ */
+
+:root {
+  --cream: #fbf5ec;
+  --cream-deep: #f5ebdd;
+  --white: #ffffff;
+  --brown: #4a2e1b;
+  --brown-soft: #6b4a30;
+  --amber: #e8961e;
+  --amber-deep: #c87b2a;
+  --teal: #2e9fa4;
+  --teal-deep: #1f7478;
+  --teal-mist: #e3f2f2;
+  --ink: #33261c;
+  --shadow: 0 10px 30px rgba(74, 46, 27, 0.12);
+  --radius: 14px;
+  --max-width: 1120px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Nunito Sans", "Avenir Next", "Avenir", sans-serif;
+  font-weight: 300;
+  font-size: 1.06rem;
+  line-height: 1.75;
+  color: var(--ink);
+  background: var(--cream);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--teal-deep);
+  text-decoration: none;
+}
+
+/* ---------- Typography ---------- */
+
+h1, h2, h3, .wordmark {
+  font-family: "Marcellus", "Times New Roman", serif;
+  font-weight: 400;
+  color: var(--brown);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2.1rem, 4.5vw, 3.4rem);
+  letter-spacing: 0.02em;
+}
+
+h2 {
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+}
+
+.kicker {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--amber-deep);
+  margin-bottom: 1rem;
+}
+
+.kicker::before { content: "-  "; }
+.kicker::after  { content: "  -"; }
+
+.lead {
+  font-size: 1.18rem;
+  max-width: 46em;
+}
+
+.center { text-align: center; }
+.center .lead { margin-left: auto; margin-right: auto; }
+
+/* ---------- Layout ---------- */
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+section {
+  padding: 5rem 0;
+}
+
+.section-white { background: var(--white); }
+.section-teal  { background: var(--teal-mist); }
+.section-brown {
+  background: var(--brown);
+  color: #f4e9db;
+}
+.section-brown h2,
+.section-brown h3 { color: var(--cream); }
+.section-brown .kicker { color: var(--amber); }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+/* ---------- Header / nav ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(251, 245, 236, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(74, 46, 27, 0.1);
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.5rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand img {
+  height: 52px;
+  width: auto;
+  border-radius: 8px;
+}
+
+.brand .wordmark {
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brown);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.7rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brown-soft);
+  transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active { color: var(--amber-deep); }
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.7rem;
+  color: var(--brown);
+  cursor: pointer;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-block;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.95rem 2.1rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+}
+
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+.btn-amber {
+  background: var(--amber);
+  color: #fff;
+}
+.btn-amber:hover { background: var(--amber-deep); }
+
+.btn-teal {
+  background: var(--teal);
+  color: #fff;
+}
+.btn-teal:hover { background: var(--teal-deep); }
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--brown);
+  color: var(--brown);
+}
+.btn-outline:hover { background: var(--brown); color: var(--cream); }
+
+.section-brown .btn-outline {
+  border-color: var(--cream);
+  color: var(--cream);
+}
+.section-brown .btn-outline:hover { background: var(--cream); color: var(--brown); }
+
+/* ---------- Hero ---------- */
+
+.hero {
+  padding: 4.5rem 0 5rem;
+  background:
+    radial-gradient(ellipse at 50% -20%, rgba(232, 150, 30, 0.16), transparent 55%),
+    var(--cream);
+  text-align: center;
+}
+
+.hero img.hero-logo {
+  width: min(300px, 62vw);
+  margin: 0 auto 2rem;
+  border-radius: var(--radius);
+}
+
+.hero h1 { max-width: 21em; margin: 0 auto 1.2rem; }
+
+.hero .lead { margin: 0 auto 2.2rem; }
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- Mission pillars ---------- */
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+  margin-top: 3rem;
+}
+
+.pillar {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 2rem 1.7rem;
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--amber);
+}
+
+.pillar:nth-child(even) { border-top-color: var(--teal); }
+
+.pillar .pillar-icon {
+  font-size: 1.9rem;
+  margin-bottom: 0.8rem;
+}
+
+.pillar h3 { margin-bottom: 0.6rem; }
+
+.pillar p { font-size: 0.98rem; }
+
+/* ---------- Complementary (bridge) section ---------- */
+
+.bridge-figure {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.bridge-list {
+  list-style: none;
+  margin-top: 1.4rem;
+}
+
+.bridge-list li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.9rem;
+}
+
+.bridge-list li::before {
+  content: "☀";
+  position: absolute;
+  left: 0;
+  color: var(--amber);
+}
+
+/* ---------- Giving tiers ---------- */
+
+.tier-toggle {
+  display: inline-flex;
+  border: 2px solid var(--teal);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 1.4rem 0 2rem;
+}
+
+.tier-toggle button {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.6rem;
+  background: transparent;
+  color: var(--teal-deep);
+  border: none;
+  cursor: pointer;
+}
+
+.tier-toggle button.active {
+  background: var(--teal);
+  color: #fff;
+}
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.tier {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.8rem 1.6rem;
+  box-shadow: var(--shadow);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.tier:hover { transform: translateY(-3px); }
+
+.tier.selected { border-color: var(--amber); }
+
+.tier .amount {
+  font-family: "Marcellus", serif;
+  font-size: 2rem;
+  color: var(--amber-deep);
+}
+
+.tier p {
+  font-size: 0.95rem;
+  margin-top: 0.4rem;
+}
+
+.tier-note {
+  font-size: 0.9rem;
+  color: var(--brown-soft);
+  margin-top: 1.6rem;
+}
+
+/* ---------- Videos ---------- */
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+  margin-top: 2.6rem;
+}
+
+.video-frame {
+  position: relative;
+  padding-top: 56.25%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: #000;
+}
+
+.video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- Team ---------- */
+
+.founder-card {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 3rem;
+  align-items: start;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.founder-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.founder-card .founder-body {
+  padding: 2.4rem 2.4rem 2.4rem 0;
+}
+
+.role {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+  margin: 0.3rem 0 1rem;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2.6rem;
+}
+
+.team-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.team-card img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: top;
+}
+
+.team-card .team-body {
+  padding: 1.4rem 1.5rem 1.7rem;
+}
+
+.team-card h3 { margin-bottom: 0.1rem; }
+
+.team-card p { font-size: 0.94rem; margin-top: 0.7rem; }
+
+/* ---------- Forms ---------- */
+
+.form-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.6rem;
+  max-width: 760px;
+  margin: 2.5rem auto 0;
+}
+
+.form-field { margin-bottom: 1.4rem; }
+
+.form-field label {
+  display: block;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brown-soft);
+  margin-bottom: 0.45rem;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid #d8c9b8;
+  border-radius: 10px;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+
+.form-note {
+  font-size: 0.88rem;
+  color: var(--brown-soft);
+  margin-top: 1rem;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  background: var(--brown);
+  color: #e9dccb;
+  padding: 3.5rem 0 2rem;
+  font-size: 0.95rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.site-footer .wordmark {
+  color: var(--cream);
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+.site-footer h3 {
+  color: var(--amber);
+  font-size: 0.85rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.site-footer ul { list-style: none; }
+.site-footer li { margin-bottom: 0.5rem; }
+.site-footer a { color: #e9dccb; }
+.site-footer a:hover { color: var(--amber); }
+
+.footer-bottom {
+  border-top: 1px solid rgba(233, 220, 203, 0.25);
+  padding-top: 1.4rem;
+  font-size: 0.82rem;
+  text-align: center;
+  color: rgba(233, 220, 203, 0.75);
+}
+
+/* ---------- Page hero (interior pages) ---------- */
+
+.page-hero {
+  padding: 4rem 0 3.5rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% -20%, rgba(46, 159, 164, 0.14), transparent 55%),
+    var(--cream);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .grid-2,
+  .pillars,
+  .tiers,
+  .video-grid,
+  .team-grid,
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .founder-card { grid-template-columns: 1fr; }
+  .founder-card .founder-body { padding: 2rem; }
+}
+
+@media (max-width: 640px) {
+  section { padding: 3.4rem 0; }
+
+  .grid-2,
+  .pillars,
+  .tiers,
+  .video-grid,
+  .team-grid,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(74, 46, 27, 0.12);
+    padding: 0.5rem 0;
+  }
+
+  .nav-links.open { display: flex; }
+
+  .nav-links li { width: 100%; text-align: center; }
+  .nav-links a { display: block; padding: 0.9rem 0; }
+
+  .nav-toggle { display: block; }
+
+  .brand .wordmark { font-size: 0.85rem; }
+}

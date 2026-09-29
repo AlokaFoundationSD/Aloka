@@ -1,0 +1,38 @@
+# Publishes the contents of site/ to GitHub Pages on every push to main.
+# Because only site/ is uploaded, its index.html is served at the domain root
+# and the rest of the repository (README, source notes) stays private to the repo.
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Allows a manual re-deploy from the repository's Actions tab.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let an in-progress deploy finish rather than cancelling it mid-publish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

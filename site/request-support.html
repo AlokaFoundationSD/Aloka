@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request Support | The Aloka Foundation</title>
+  <meta name="description" content="Submit a formal request for support from the Aloka Foundation: home and vehicle accommodations, tuition assistance, product purchases, and more." />
+  <link rel="canonical" href="https://www.alokafoundationsd.org/request-support.html" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Montserrat:wght@600;700&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav-bar">
+    <a class="brand" href="index.html">
+      <img src="assets/aloka-logo.jpg" alt="The Aloka Foundation logo" />
+      <span class="wordmark">The Aloka Foundation</span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#mission">Our Mission</a></li>
+      <li><a href="team.html">Our Team</a></li>
+      <li><a href="request-support.html" class="active">Request Support</a></li>
+      <li><a href="give.html" class="btn btn-amber" style="padding:0.6rem 1.4rem;">Give</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <p class="kicker">Request Support</p>
+    <h1>Submitting a formal request for support</h1>
+    <p class="lead" style="margin:1.2rem auto 0;">
+      The Aloka Foundation partners with people on specific, meaningful needs: financial
+      support for home or vehicle accommodations, help with a specific product purchase,
+      assistance with tuition or continuing education opportunities, and more. Tell us about
+      your need and how it aligns with our mission.
+    </p>
+  </div>
+</section>
+
+<section class="section-white" style="padding-top:3rem;">
+  <div class="container">
+    <!--
+      Submitting this form opens the visitor's email app with a pre-filled message
+      addressed to the foundation. The destination address (SUPPORT_EMAIL) and the
+      message formatting live in js/main.js. No third-party form service is required.
+    -->
+    <form class="form-card" id="support-form">
+      <div class="form-field">
+        <label for="applicant">Applicant Name or Name of Organization</label>
+        <input type="text" id="applicant" name="applicant" required />
+      </div>
+      <div class="form-field">
+        <label for="need">Support Need / Specific Ask</label>
+        <textarea id="need" name="need" rows="5" required placeholder="E.g. financial support for home/vehicle accommodations, help with a specific product purchase, assistance with tuition or continuing education opportunities. Be specific with amounts and provide backing documentation."></textarea>
+      </div>
+      <div class="form-field">
+        <label for="alignment">In what ways does your Support Need / Specific Ask align with the Mission and Vision of the Aloka Foundation?</label>
+        <textarea id="alignment" name="alignment" rows="5" required></textarea>
+      </div>
+      <div class="form-field">
+        <label for="timeline">Timeline for the Request</label>
+        <input type="text" id="timeline" name="timeline" required />
+      </div>
+      <div class="form-field">
+        <label for="contact">Main Point of Contact Moving Forward</label>
+        <input type="text" id="contact" name="contact" required />
+      </div>
+      <div class="form-field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <button type="submit" class="btn btn-teal">Submit Request</button>
+      <p class="form-note">
+        Submitting opens your email app with your request ready to send. If you prefer, you can
+        email us directly at <a href="mailto:kirk@lifeworks-sls.com">kirk@lifeworks-sls.com</a>.
+        Our team reviews every request with care. We will follow up with your point of contact
+        to learn more and to take the next steps together.
+      </p>
+    </form>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="wordmark">The Aloka Foundation</div>
+        <p>
+          Partnering with people financially, educationally, and relationally to
+          illuminate pathways toward lives of distinction, purpose, and connection.
+        </p>
+      </div>
+      <div>
+        <h3>Explore</h3>
+        <ul>
+          <li><a href="index.html#mission">Our Mission</a></li>
+          <li><a href="team.html">Our Team</a></li>
+          <li><a href="give.html">Give</a></li>
+          <li><a href="request-support.html">Request Support</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Our Partner</h3>
+        <ul>
+          <li><a href="https://www.lifeworks-sls.com/" target="_blank" rel="noopener">Life Works</a></li>
+          <li><a href="https://www.lifeworks-sls.com/services" target="_blank" rel="noopener">Supported Living Services</a></li>
+          <li><a href="https://www.lifeworks-sls.com/consulting-training" target="_blank" rel="noopener">Consulting &amp; Training</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; <span id="year"></span> The Aloka Foundation. All rights reserved.
+      The Aloka Foundation is a nonprofit organization; donations may be tax-deductible to the extent allowed by law.
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
