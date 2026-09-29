@@ -80,7 +80,7 @@ GitHub-specific files already in `site/`:
    `site/` out of it):
 
    ```bash
-   cd "/Users/jserences/Library/CloudStorage/Dropbox/python/cursor/Aloka"
+   cd "/Users/.../Aloka"
    git remote add origin https://github.com/USERNAME/REPO.git
    git push -u origin main
    ```
