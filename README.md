@@ -142,87 +142,67 @@ automatically.
 
 ## Two things to configure before launch
 
-1. **Donations** — The "Complete Your Gift" button on `give.html` uses the Wix Headless
-   APIs to create a per-donor checkout (with the donor's chosen amount and frequency) on
-   the Life Works Wix site, then sends the donor to Wix's secure checkout page. If the API
-   flow fails for any reason, the donor is sent to the existing donation form at
-   lifeworks-sls.com/thealokafoundation instead, so the button always works.
-   Setup required for the API flow to activate (all in `js/main.js`):
-   - `WIX_CLIENT_ID` must be a headless OAuth client created on the lifeworks-sls.com
-     site itself (its dashboard → Settings → Development & integrations → Headless
-     Settings), NOT on a separate headless project. A client from a separate project
-     cannot see the donation campaign, and every click will fall back to the form.
-   - The deployed site's domain must be added to the client's allowed redirect domains
-     in the same Headless Settings screen.
-   - `DONATION_CAMPAIGN_ID` is the Wix Donations campaign ID
-     (currently `5a511be7-ad8d-4993-8b2b-dda9a4ad98b7`).
+1. **Donations** — see "Donations via Zeffy" below. The wiring is done; the remaining
+   work is finishing the Zeffy account setup so the form can accept payments.
 2. **Support request form** — `request-support.html` opens the visitor's email app with a
    pre-filled message addressed to `kirk@lifeworks-sls.com` (no third-party form service
    needed). To change the destination, update `SUPPORT_EMAIL` at the top of the support-form
    section in `js/main.js` and the fallback mailto link in `request-support.html`.
 
-## Switching the donation backend to Zeffy or PayPal
+## Donations via Zeffy
 
-The site is pre-wired for this switch: `js/main.js` has a `DONATION_PROVIDER_URL`
-constant that is currently empty. As soon as a URL is pasted there, the "Complete Your
-Gift" button sends donors straight to that page and the Wix checkout flow is skipped
-entirely — no other code changes needed. The steps:
+The "Complete Your Gift" button sends donors to the foundation's Zeffy form:
 
-1. **Set up the processor account** (this is the real work — it requires the
-   foundation's nonprofit paperwork):
-   - **Zeffy** ([zeffy.com](https://www.zeffy.com)) — free for nonprofits (0% fees;
-     donors are invited to leave Zeffy an optional tip). Sign up with the foundation's
-     EIN/nonprofit registration and bank account, then create a **Donation form**. In
-     the form settings, set the suggested amounts to match the site's tiers
-     ($25 / $50 / $100 / $250 / $500) and enable **monthly giving** so the site's
-     one-time/monthly toggle has an equivalent on the payment page.
-   - **PayPal** ([paypal.com/nonprofit](https://www.paypal.com/us/non-profit)) — set up
-     a business account, complete charity verification to get the discounted nonprofit
-     rate (~1.99% + $0.49 per transaction), then create a **Donate button** at
-     paypal.com/donate/buttons and copy its hosted donate link. Enable recurring
-     donations in the button settings for monthly gifts.
-2. **Paste the URL into the site**: in `js/main.js`, set
-   `DONATION_PROVIDER_URL = 'https://...'` (the donation form / donate link URL from
-   step 1). Commit and push — GitHub Pages redeploys automatically.
-3. **Test with a real gift**: make one small donation end to end and confirm the money
-   arrives in the foundation's account and the donor receipt looks right.
+```
+https://www.zeffy.com/en-US/donation-form/donate-to-change-lives-25558
+```
 
-Things to know before switching:
+Zeffy is free for nonprofits (0% fees; donors are invited to leave Zeffy an optional
+tip), and money lands in the foundation's own bank account with receipts issued in the
+foundation's name.
 
-- **Where the money goes changes.** The current Wix flow deposits donations into Life
-  Works' account and receipts come from Life Works. Zeffy/PayPal deposit into the
-  foundation's own bank account and issue receipts in the foundation's name — cleaner
-  once Aloka's 501(c)(3) status is confirmed, and required for donors to see "The
-  Aloka Foundation" on their receipts.
-- **Monthly donors don't migrate.** Recurring gifts live inside whichever processor
-  set them up; switching later means every monthly donor must re-enroll. Pick the
-  long-term processor before promoting monthly giving.
-- **Amounts are configured on the processor's side.** The tier cards on the give page
-  remain as impact storytelling, but the amount the donor actually pays is chosen on
-  the processor's page — so mirror the site's tiers in the Zeffy/PayPal settings.
-- **The old flow remains as a safety net.** If `DONATION_PROVIDER_URL` is ever set
-  back to `''`, the button returns to the Wix checkout + Life Works fallback exactly
-  as before.
+How the pieces fit:
 
-### How Zeffy fits the GitHub Pages setup
+- `DONATION_PROVIDER_URL` in `js/main.js` holds the form URL. While it is set, the Wix
+  checkout code further up the file is skipped entirely. Setting it back to `''`
+  restores the old Wix flow, which is why that code is still present.
+- The same URL is also the static `href` on the button in `give.html`, so the button
+  still reaches Zeffy if JavaScript fails to load.
+- **The amount carries over.** Zeffy prefills its amount field from an `amount` query
+  parameter, so clicking the $250 tier sends the donor to `…-25558?amount=250` with
+  $250 already entered. This is why the site's tiers ($10–$500) do not need to match
+  Zeffy's suggested buttons ($30 / $75 / $125 / $300) — the donor's chosen amount
+  arrives in the "Other" field regardless.
+- **The frequency does not carry over.** Zeffy has no query parameter for one-time vs.
+  monthly (`frequency`, `recurrence`, `recurring`, and `interval` were all tested and
+  ignored). When a donor picks Monthly on the site, `give.html` reveals the
+  `#monthly-hint` paragraph telling them to choose **Monthly** on the Zeffy page.
+- Do not paste URLs copied from the Zeffy dashboard straight into the code: they carry
+  a `?fromOnboarding=true` parameter that should not be shown to donors.
 
-Nothing about hosting on GitHub Pages constrains the Zeffy integration, and no
-server-side code is needed either way. Zeffy offers two integration styles and both
-work on a static site:
+### Remaining Zeffy setup
 
-- **Link out** — the "Complete Your Gift" button opens Zeffy's hosted form. This is
-  what `DONATION_PROVIDER_URL` already does, so it is a one-line change.
-- **Embed** — Zeffy's donation form in an `<iframe>` on `give.html`, so donors never
-  leave the site. GitHub Pages serves no `Content-Security-Policy` header, so the
-  iframe loads without any extra configuration.
+The campaign is live but **cannot accept payments yet**. Selecting any amount on the
+form shows: "We're sorry, this campaign is not ready to accept payments yet. The
+nonprofit must complete their account setup to start accepting payments on this
+campaign." Finish the account setup in the Zeffy dashboard (organization verification
+and bank details), then make one small real donation end to end to confirm the money
+arrives and the receipt looks right.
 
-Two things are worth setting up in the same pass when we do this:
+### Hosting notes
+
+Nothing about GitHub Pages constrains this. The link-out approach needs no server-side
+code, and the alternative — embedding Zeffy's form in an `<iframe>` on `give.html` so
+donors never leave the site — also works, because GitHub Pages serves no
+`Content-Security-Policy` header to block it.
+
+Two related points:
 
 - Keep Cloudflare's proxy off (see the DNS step above). A proxied domain lets
   Cloudflare rewrite and defer scripts, which is a common cause of embedded donation
   forms failing to render.
-- Zeffy can redirect donors to a custom page after a completed gift. If we want that,
-  add a `site/thank-you.html` page and paste its URL
+- Zeffy can redirect donors to a custom page after a completed gift. To use that, add a
+  `site/thank-you.html` page and paste its URL
   (`https://www.alokafoundationsd.org/thank-you.html`) into the Zeffy form settings.
 
 ## Content sources

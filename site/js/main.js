@@ -36,21 +36,31 @@ var WIX_DONATIONS_APP_ID = '333b456e-dd48-4d6b-b32b-9fd48d74e163';
 // correct checkout for each donor (one extra click for the donor).
 var FALLBACK_DONATE_URL = 'https://www.lifeworks-sls.com/thealokafoundation';
 
-// To switch the donation backend to a dedicated processor (e.g. Zeffy or
-// PayPal), paste the processor's donation page URL here. When this is set,
-// the "Complete Your Gift" button sends donors straight to that page and the
-// Wix checkout flow above is skipped entirely. See "Switching the donation
-// backend to Zeffy or PayPal" in the README for full setup steps.
-// Example: var DONATION_PROVIDER_URL = 'https://www.zeffy.com/en-US/donation-form/aloka';
-var DONATION_PROVIDER_URL = '';
+// Donations are processed by the foundation's own Zeffy form. While this is
+// set, the "Complete Your Gift" button sends donors straight there and the
+// Wix checkout flow above is skipped entirely; setting it back to '' restores
+// the Wix flow. Keep the URL free of tracking parameters such as
+// `?fromOnboarding=true`, which Zeffy appends inside its own dashboard.
+var DONATION_PROVIDER_URL = 'https://www.zeffy.com/en-US/donation-form/donate-to-change-lives-25558';
 
 var freqButtons = document.querySelectorAll('.freq-btn');
 var tierCards = document.querySelectorAll('.tier[data-amount]');
 var summary = document.getElementById('gift-summary');
 var donateBtn = document.getElementById('donate-btn');
+var monthlyHint = document.getElementById('monthly-hint');
 
 if (freqButtons.length && tierCards.length) {
   var state = { freq: 'one-time', amount: 100 };
+
+  // Zeffy prefills the gift amount from an `amount` query parameter, so the
+  // tier selected here carries over to its form. Zeffy has no equivalent
+  // parameter for the giving frequency, so monthly donors get an on-page note
+  // asking them to pick "Monthly" once they arrive.
+  function providerUrlForGift() {
+    if (!DONATION_PROVIDER_URL) return FALLBACK_DONATE_URL;
+    var separator = DONATION_PROVIDER_URL.indexOf('?') === -1 ? '?' : '&';
+    return DONATION_PROVIDER_URL + separator + 'amount=' + encodeURIComponent(state.amount);
+  }
 
   function updateSummary() {
     if (summary) {
@@ -58,7 +68,10 @@ if (freqButtons.length && tierCards.length) {
       summary.textContent = 'Selected: ' + freqLabel + ' of $' + state.amount;
     }
     if (donateBtn) {
-      donateBtn.href = DONATION_PROVIDER_URL || FALLBACK_DONATE_URL;
+      donateBtn.href = providerUrlForGift();
+    }
+    if (monthlyHint) {
+      monthlyHint.hidden = !(DONATION_PROVIDER_URL && state.freq === 'monthly');
     }
   }
 
