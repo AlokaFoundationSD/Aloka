@@ -44,13 +44,60 @@ var FALLBACK_DONATE_URL = 'https://www.lifeworks-sls.com/thealokafoundation';
 var DONATION_PROVIDER_URL = 'https://www.zeffy.com/en-US/donation-form/donate-to-change-lives-25558';
 
 var freqButtons = document.querySelectorAll('.freq-btn');
-var tierCards = document.querySelectorAll('.tier[data-amount]');
+var tierGrids = {
+  'one-time': document.getElementById('tiers-one-time'),
+  monthly: document.getElementById('tiers-monthly')
+};
 var summary = document.getElementById('gift-summary');
 var donateBtn = document.getElementById('donate-btn');
 var monthlyHint = document.getElementById('monthly-hint');
 
-if (freqButtons.length && tierCards.length) {
+if (freqButtons.length && tierGrids['one-time'] && tierGrids.monthly) {
   var state = { freq: 'one-time', amount: 100 };
+
+  function cardsIn(freq) {
+    return Array.prototype.slice.call(
+      tierGrids[freq].querySelectorAll('.tier[data-amount]')
+    );
+  }
+
+  function amountOf(card) {
+    return parseInt(card.dataset.amount, 10);
+  }
+
+  // Each grid's starting card, captured before any clicks move the selection.
+  var defaultAmount = {};
+  Object.keys(tierGrids).forEach(function (freq) {
+    var cards = cardsIn(freq);
+    var preselected = tierGrids[freq].querySelector('.tier.selected');
+    defaultAmount[freq] = amountOf(preselected || cards[0]);
+  });
+
+  // Show the grid for the current frequency and highlight the right card in it.
+  // Zeffy presets different amounts per frequency, so the donor's current choice
+  // may not exist in the grid being switched to; keep it when it does and fall
+  // back to that grid's own default when it does not.
+  function showActiveGrid() {
+    Object.keys(tierGrids).forEach(function (freq) {
+      tierGrids[freq].hidden = freq !== state.freq;
+    });
+
+    var cards = cardsIn(state.freq);
+    var match = null;
+    cards.forEach(function (card) {
+      if (amountOf(card) === state.amount) match = card;
+    });
+    if (!match) {
+      cards.forEach(function (card) {
+        if (amountOf(card) === defaultAmount[state.freq]) match = card;
+      });
+    }
+    if (!match) match = cards[0];
+
+    cards.forEach(function (card) { card.classList.remove('selected'); });
+    match.classList.add('selected');
+    state.amount = amountOf(match);
+  }
 
   // Zeffy prefills the gift amount from an `amount` query parameter, so the
   // tier selected here carries over to its form. Zeffy has no equivalent
@@ -80,19 +127,23 @@ if (freqButtons.length && tierCards.length) {
       freqButtons.forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
       state.freq = btn.dataset.freq;
+      showActiveGrid();
       updateSummary();
     });
   });
 
-  tierCards.forEach(function (card) {
-    card.addEventListener('click', function () {
-      tierCards.forEach(function (c) { c.classList.remove('selected'); });
-      card.classList.add('selected');
-      state.amount = parseInt(card.dataset.amount, 10);
-      updateSummary();
+  Object.keys(tierGrids).forEach(function (freq) {
+    cardsIn(freq).forEach(function (card) {
+      card.addEventListener('click', function () {
+        cardsIn(freq).forEach(function (c) { c.classList.remove('selected'); });
+        card.classList.add('selected');
+        state.amount = amountOf(card);
+        updateSummary();
+      });
     });
   });
 
+  showActiveGrid();
   updateSummary();
 
   // Wix Headless checkout flow: token -> create checkout -> redirect session.

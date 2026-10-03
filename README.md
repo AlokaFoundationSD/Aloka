@@ -172,15 +172,25 @@ How the pieces fit:
 - **The amount carries over.** Zeffy prefills its amount field from an `amount` query
   parameter, so clicking the $250 tier sends the donor to `…-25558?amount=250` with
   $250 already entered.
-- **The tiers mirror Zeffy's one-time presets** ($25 / $50 / $100 / $250), so the donor
-  sees the same figure highlighted on both pages. The four cards use the `tiers-4`
-  class for a four-across grid; the three-card grid on `index.html` keeps the default
-  `tiers` layout. Keep the two lists in step if either side changes — though nothing
+- **The tiers mirror Zeffy's presets, which differ by frequency.** Zeffy configures
+  one-time and monthly amounts independently, so `give.html` carries one grid per
+  frequency and the toggle swaps which is visible:
+
+  | Frequency | Amounts |
+  | --------- | ------------------------- |
+  | One time  | $25 / $50 / $100 / $250   |
+  | Monthly   | $10 / $25 / $50 / $100    |
+
+  Switching frequency keeps the donor's amount when the other grid also offers it
+  ($100 one-time → $100 monthly) and otherwise falls back to that grid's default
+  ($250 one-time → $50 monthly, since Zeffy has no $250 monthly preset). If either
+  list changes in the Zeffy dashboard, update the matching grid in `give.html`. Nothing
   breaks if they drift, since any amount passes through in the URL and lands in Zeffy's
-  "Other" field.
-- Zeffy uses a **separate set of amounts for monthly** gifts ($10 / $25 / $50 / $100),
-  configured independently in the Zeffy dashboard. A donor who picks $250 and switches
-  to Monthly gets $250 in the "Other" field rather than a highlighted preset.
+  "Other" field — the donor just won't see a highlighted preset.
+- Both grids use the `tiers-4` class for a four-across layout; the three-card grid on
+  `index.html` keeps the default `tiers` layout. The `.tiers[hidden]` rule in the
+  stylesheet is required: `.tiers` sets `display: grid`, which outranks the browser's
+  default `[hidden]` styling and would otherwise leave both grids on screen at once.
 - **The frequency does not carry over.** Zeffy has no query parameter for one-time vs.
   monthly (`frequency`, `recurrence`, `recurring`, and `interval` were all tested and
   ignored). When a donor picks Monthly on the site, `give.html` reveals the

@@ -362,6 +362,11 @@ section {
    collapse it to two columns and then one on narrower screens. */
 .tiers-4 { grid-template-columns: repeat(4, 1fr); }
 
+/* The give page toggles between its one-time and monthly grids with the hidden
+   attribute. Needed because the display:grid above outranks the browser's
+   default [hidden] rule, which would otherwise leave both grids on screen. */
+.tiers[hidden] { display: none; }
+
 .tier {
   background: var(--white);
   border-radius: var(--radius);
@@ -380,6 +385,14 @@ section {
   font-family: "Marcellus", serif;
   font-size: 2rem;
   color: var(--amber-deep);
+}
+
+/* "/mo" suffix on the monthly amounts, kept small so the figure still reads
+   as the headline. */
+.tier .amount .per {
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  opacity: 0.75;
 }
 
 .tier p {
