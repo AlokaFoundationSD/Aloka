@@ -357,6 +357,11 @@ section {
   text-align: left;
 }
 
+/* Four-across variant for the give page, whose amounts mirror Zeffy's four
+   one-time presets. Declared before the responsive rules below so those still
+   collapse it to two columns and then one on narrower screens. */
+.tiers-4 { grid-template-columns: repeat(4, 1fr); }
+
 .tier {
   background: var(--white);
   border-radius: var(--radius);

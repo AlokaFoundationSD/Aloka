@@ -171,9 +171,16 @@ How the pieces fit:
   still reaches Zeffy if JavaScript fails to load.
 - **The amount carries over.** Zeffy prefills its amount field from an `amount` query
   parameter, so clicking the $250 tier sends the donor to `…-25558?amount=250` with
-  $250 already entered. This is why the site's tiers ($10–$500) do not need to match
-  Zeffy's suggested buttons ($30 / $75 / $125 / $300) — the donor's chosen amount
-  arrives in the "Other" field regardless.
+  $250 already entered.
+- **The tiers mirror Zeffy's one-time presets** ($25 / $50 / $100 / $250), so the donor
+  sees the same figure highlighted on both pages. The four cards use the `tiers-4`
+  class for a four-across grid; the three-card grid on `index.html` keeps the default
+  `tiers` layout. Keep the two lists in step if either side changes — though nothing
+  breaks if they drift, since any amount passes through in the URL and lands in Zeffy's
+  "Other" field.
+- Zeffy uses a **separate set of amounts for monthly** gifts ($10 / $25 / $50 / $100),
+  configured independently in the Zeffy dashboard. A donor who picks $250 and switches
+  to Monthly gets $250 in the "Other" field rather than a highlighted preset.
 - **The frequency does not carry over.** Zeffy has no query parameter for one-time vs.
   monthly (`frequency`, `recurrence`, `recurring`, and `interval` were all tested and
   ignored). When a donor picks Monthly on the site, `give.html` reveals the
