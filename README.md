@@ -11,6 +11,7 @@ site/
 ├── team.html             Kirk Hinkleman (founder) + the Life Works community team
 ├── give.html             Donation page with one-time/monthly toggle and amount tiers
 ├── request-support.html  Formal support request form (mirrors the current Wix form)
+├── thank-you.html        Post-donation confirmation page (Zeffy redirect target)
 ├── 404.html              Not-found page served by GitHub Pages
 ├── css/style.css         All styling (palette drawn from the Aloka logo)
 ├── js/main.js            Mobile nav, donation checkout, tier selection, footer year
@@ -201,9 +202,17 @@ Two related points:
 - Keep Cloudflare's proxy off (see the DNS step above). A proxied domain lets
   Cloudflare rewrite and defer scripts, which is a common cause of embedded donation
   forms failing to render.
-- Zeffy can redirect donors to a custom page after a completed gift. To use that, add a
-  `site/thank-you.html` page and paste its URL
-  (`https://www.alokafoundationsd.org/thank-you.html`) into the Zeffy form settings.
+- Zeffy can redirect donors to a custom page after a completed gift. `thank-you.html`
+  exists for this. To switch it on, open the donation form in the Zeffy dashboard and
+  set the post-donation redirect to:
+
+  ```
+  https://www.alokafoundationsd.org/thank-you.html
+  ```
+
+  The page is marked `noindex` and is deliberately left out of `sitemap.xml`, since it
+  is only meaningful to someone who has just given. Until the redirect is configured,
+  Zeffy shows its own confirmation screen and the page simply goes unused.
 
 ## Content sources
 
