@@ -61,7 +61,9 @@ GitHub-specific files already in `site/`:
 - `CNAME` — records the custom domain (`www.alokafoundationsd.org`). With the Actions
   workflow the authoritative setting is Settings → Pages → Custom domain; this file is
   a documented fallback that takes over if the site is ever switched to branch-based
-  deployment.
+  deployment. Confirmed in practice: with an Actions deploy this file is served as a
+  plain text file at `/CNAME` and does **not** set the domain, so step 5 below is
+  required rather than optional.
 - `.nojekyll` — disables GitHub's Jekyll processing so files are served exactly as-is.
 - `404.html` — shown by GitHub Pages for any URL that doesn't exist (uses absolute
   paths since it can be served from any missing path).
@@ -72,13 +74,21 @@ GitHub-specific files already in `site/`:
 
 ### Deploy steps
 
-1. Create a GitHub account (free) if there isn't one yet.
-2. Get this project onto GitHub as a **public** repository on the `main` branch (Pages
-   on a free account requires a public repo). The workflow picks `site/` out of it.
+1. Create a free GitHub **Organization** for the foundation (e.g. `AlokaFoundationSD`):
+   on github.com, click your avatar → Your organizations → New organization → Free plan.
+   An Organization is used rather than a personal account so that the site's URL carries
+   the foundation's name, nothing ties it to an individual's other projects, and more
+   than one board member can be made an owner — the site does not become stranded if any
+   one person steps away. It is administered from an existing personal login, so there is
+   no second password or 2FA device to keep track of.
+2. Get this project onto GitHub as a **public** repository owned by that Organization, on
+   the `main` branch (Pages on a free plan requires a public repo). The workflow picks
+   `site/` out of it.
 
    **Using GitHub Desktop:** File → Add Local Repository → choose this folder, then
-   click **Publish repository**. In the dialog, **untick "Keep this code private"** —
-   it is ticked by default, and a private repo disables free Pages.
+   click **Publish repository**. Set **Organization** to the foundation's org — it
+   defaults to your personal account — and **untick "Keep this code private"**, which is
+   ticked by default and would disable free Pages.
 
    **Using the command line:** create a new empty repository on GitHub first (no
    README, `.gitignore`, or license), then:
@@ -91,8 +101,15 @@ GitHub-specific files already in `site/`:
 
 3. In the repo: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
    The first deploy runs automatically; watch it on the Actions tab. The site then goes
-   live at `https://USERNAME.github.io/REPO/` within a couple of minutes. Confirm it
+   live at `https://OWNER.github.io/REPO/` within a couple of minutes. Confirm it
    looks right there before touching the domain.
+
+   **Be aware the site is publicly reachable at that address from this point on**, and
+   it stays reachable there until step 5 sets the custom domain. If the account that
+   owns the repo also has a `OWNER.github.io` user site with its own custom domain, the
+   preview URL redirects to that domain and the site is served underneath it
+   (e.g. `https://some-other-site.org/REPO/`). This is why the foundation's repo lives
+   under its own Organization rather than a personal account that hosts unrelated sites.
 4. Point the domain at GitHub by adding DNS records in Cloudflare. Do this before
    setting the custom domain in GitHub, because once the domain is set GitHub starts
    redirecting the `github.io` address to it.
@@ -112,14 +129,15 @@ GitHub-specific files already in `site/`:
    | A     | `@`   | `185.199.109.153`    | DNS only     |
    | A     | `@`   | `185.199.110.153`    | DNS only     |
    | A     | `@`   | `185.199.111.153`    | DNS only     |
-   | CNAME | `www` | `USERNAME.github.io` | DNS only     |
+   | CNAME | `www` | `ORG-NAME.github.io` | DNS only     |
 
    Notes:
    - `@` means the bare domain (`alokafoundationsd.org` with nothing in front). The
      four A records are GitHub Pages' four servers — add all four as four separate
      records with the same name, so the site stays up if one is down.
-   - Replace `USERNAME` with the GitHub username that owns the repository. The value is
-     that username's github.io address, **not** the repository name.
+   - Replace `ORG-NAME` with the Organization that owns the repository. The value is
+     that owner's github.io address, **not** the repository name — so for an org named
+     `AlokaFoundationSD` it is `alokafoundationsd.github.io`.
    - **Proxy status must be "DNS only" (grey cloud), not "Proxied" (orange cloud).**
      Cloudflare defaults new records to Proxied. Leaving it on blocks GitHub from
      validating the domain and issuing the HTTPS certificate, and Cloudflare's script
