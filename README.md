@@ -99,10 +99,21 @@ GitHub-specific files already in `site/`:
    git push -u origin main
    ```
 
-3. In the repo: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
-   The first deploy runs automatically; watch it on the Actions tab. The site then goes
-   live at `https://OWNER.github.io/REPO/` within a couple of minutes. Confirm it
-   looks right there before touching the domain.
+3. In the **repository's** Settings (not the organization's) → Pages → Build and
+   deployment → Source: **GitHub Actions**. This step is required and cannot be
+   automated: the workflow token lacks the admin rights needed to create a Pages site
+   on an org-owned repo, so letting the workflow try it fails with `Resource not
+   accessible by integration`. Enabling Pages by hand is a one-time step.
+
+   Note the two settings pages are easy to confuse. The organization's Settings → Pages
+   only lists **verified domains** (org-wide, and optional — it is not needed to publish)
+   and has no "Build and deployment" section. The repository's page is the one to use:
+   `github.com/ORG-NAME/REPO/settings/pages`, reachable from the **Settings** tab on the
+   repo itself.
+
+   Then on the Actions tab, re-run the deploy. The site goes live at
+   `https://ORG-NAME.github.io/REPO/` within a couple of minutes. Confirm it looks right
+   there before touching the domain.
 
    **Be aware the site is publicly reachable at that address from this point on**, and
    it stays reachable there until step 5 sets the custom domain. If the account that

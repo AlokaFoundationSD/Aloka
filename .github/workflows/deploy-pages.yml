@@ -28,12 +28,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # enablement turns Pages on and sets its build type to "workflow" via the
-      # API. Without it, the first run fails with "Get Pages site failed" until
-      # Pages is switched to GitHub Actions by hand in the repository settings.
+      # Pages must already be enabled with Source set to "GitHub Actions" in
+      # Settings -> Pages. The action's `enablement: true` option is deliberately
+      # not used: creating a Pages site through the API needs admin rights that
+      # the workflow token does not hold on an organization-owned repository, so
+      # it fails with "Resource not accessible by integration". Enabling Pages by
+      # hand is a one-time step; this step then just reads that configuration.
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
