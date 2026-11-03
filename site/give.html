@@ -48,16 +48,10 @@
     <p class="kicker">Choose Your Gift</p>
     <h2>Every amount lights the way</h2>
 
-    <div class="tier-toggle" role="group" aria-label="Donation frequency">
-      <button type="button" class="freq-btn active" data-freq="one-time">One Time</button>
-      <button type="button" class="freq-btn" data-freq="monthly">Monthly</button>
-    </div>
-
-    <!-- Zeffy presets different amounts for one-time and monthly gifts, so the
-         page carries one grid per frequency and the toggle above swaps which is
-         visible (see js/main.js). Each grid mirrors its Zeffy counterpart, so a
-         donor sees the same figure highlighted on both pages. -->
-    <div class="tiers tiers-4" id="tiers-one-time">
+    <!-- These amounts mirror the one-time presets on the Zeffy form, so a donor
+         sees the same figure highlighted on both pages. Donors choose one-time
+         or monthly on Zeffy itself (see js/main.js). -->
+    <div class="tiers tiers-4" id="tiers">
       <div class="tier" data-amount="25">
         <div class="amount">$25</div>
         <p>Helps fund an application fee or a workshop seat.</p>
@@ -76,33 +70,14 @@
       </div>
     </div>
 
-    <div class="tiers tiers-4" id="tiers-monthly" hidden>
-      <div class="tier" data-amount="10">
-        <div class="amount">$10<span class="per">/mo</span></div>
-        <p>Covers course materials or supplies for a community project.</p>
-      </div>
-      <div class="tier" data-amount="25">
-        <div class="amount">$25<span class="per">/mo</span></div>
-        <p>Helps fund an application fee or a workshop seat.</p>
-      </div>
-      <div class="tier selected" data-amount="50">
-        <div class="amount">$50<span class="per">/mo</span></div>
-        <p>Contributes to adaptive tools and equipment.</p>
-      </div>
-      <div class="tier" data-amount="100">
-        <div class="amount">$100<span class="per">/mo</span></div>
-        <p>Supports a certification exam or continuing education for a caregiver.</p>
-      </div>
-    </div>
-
-    <p class="tier-note" id="gift-summary">Selected: one-time gift of $100</p>
+    <p class="tier-note" id="gift-summary">Selected: gift of $100</p>
 
     <div style="margin-top:1.8rem;">
-      <a class="btn btn-amber" id="donate-btn" href="https://www.zeffy.com/en-US/donation-form/donate-to-change-lives-25558" target="_blank" rel="noopener">Complete Your Gift</a>
+      <a class="btn btn-amber" id="donate-btn" href="https://www.zeffy.com/en-US/donation-form/donate-to-change-lives-25558?amount=100" target="_blank" rel="noopener">Complete Your Gift</a>
     </div>
-    <p class="form-note" id="monthly-hint" hidden style="max-width:34em; margin:1.2rem auto 0;">
-      <strong>One extra step for monthly gifts:</strong> on the donation form, choose
-      <strong>Monthly</strong> at the top before continuing.
+    <p class="form-note" style="max-width:34em; margin:1.2rem auto 0;">
+      On the donation form, you can choose to give <strong>one time</strong> or
+      <strong>monthly</strong>.
     </p>
     <p class="form-note" style="max-width:34em; margin:1.2rem auto 0;">
       You will be taken to our secure donation form to complete your gift. Monthly donors join
