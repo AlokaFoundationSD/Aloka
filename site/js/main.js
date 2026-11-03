@@ -14,7 +14,7 @@ if (navToggle && navLinks) {
   });
 }
 
-// Donation page: frequency toggle, tier selection, and checkout.
+// Donation page: tier selection and checkout.
 //
 // When a donor clicks "Complete Your Gift", we call the Wix Headless APIs to
 // create a fresh checkout for this donor with their chosen amount, then send
@@ -43,66 +43,23 @@ var FALLBACK_DONATE_URL = 'https://www.lifeworks-sls.com/thealokafoundation';
 // `?fromOnboarding=true`, which Zeffy appends inside its own dashboard.
 var DONATION_PROVIDER_URL = 'https://www.zeffy.com/en-US/donation-form/donate-to-change-lives-25558';
 
-var freqButtons = document.querySelectorAll('.freq-btn');
-var tierGrids = {
-  'one-time': document.getElementById('tiers-one-time'),
-  monthly: document.getElementById('tiers-monthly')
-};
+var tierGrid = document.getElementById('tiers');
 var summary = document.getElementById('gift-summary');
 var donateBtn = document.getElementById('donate-btn');
-var monthlyHint = document.getElementById('monthly-hint');
 
-if (freqButtons.length && tierGrids['one-time'] && tierGrids.monthly) {
-  var state = { freq: 'one-time', amount: 100 };
-
-  function cardsIn(freq) {
-    return Array.prototype.slice.call(
-      tierGrids[freq].querySelectorAll('.tier[data-amount]')
-    );
-  }
+if (tierGrid) {
+  var tierCards = Array.prototype.slice.call(tierGrid.querySelectorAll('.tier[data-amount]'));
 
   function amountOf(card) {
     return parseInt(card.dataset.amount, 10);
   }
 
-  // Each grid's starting card, captured before any clicks move the selection.
-  var defaultAmount = {};
-  Object.keys(tierGrids).forEach(function (freq) {
-    var cards = cardsIn(freq);
-    var preselected = tierGrids[freq].querySelector('.tier.selected');
-    defaultAmount[freq] = amountOf(preselected || cards[0]);
-  });
-
-  // Show the grid for the current frequency and highlight the right card in it.
-  // Zeffy presets different amounts per frequency, so the donor's current choice
-  // may not exist in the grid being switched to; keep it when it does and fall
-  // back to that grid's own default when it does not.
-  function showActiveGrid() {
-    Object.keys(tierGrids).forEach(function (freq) {
-      tierGrids[freq].hidden = freq !== state.freq;
-    });
-
-    var cards = cardsIn(state.freq);
-    var match = null;
-    cards.forEach(function (card) {
-      if (amountOf(card) === state.amount) match = card;
-    });
-    if (!match) {
-      cards.forEach(function (card) {
-        if (amountOf(card) === defaultAmount[state.freq]) match = card;
-      });
-    }
-    if (!match) match = cards[0];
-
-    cards.forEach(function (card) { card.classList.remove('selected'); });
-    match.classList.add('selected');
-    state.amount = amountOf(match);
-  }
+  var preselected = tierGrid.querySelector('.tier.selected') || tierCards[0];
+  var state = { amount: amountOf(preselected) };
 
   // Zeffy prefills the gift amount from an `amount` query parameter, so the
-  // tier selected here carries over to its form. Zeffy has no equivalent
-  // parameter for the giving frequency, so monthly donors get an on-page note
-  // asking them to pick "Monthly" once they arrive.
+  // tier selected here carries over to its form. Donors pick one-time or
+  // monthly on the Zeffy form itself.
   function providerUrlForGift() {
     if (!DONATION_PROVIDER_URL) return FALLBACK_DONATE_URL;
     var separator = DONATION_PROVIDER_URL.indexOf('?') === -1 ? '?' : '&';
@@ -111,39 +68,22 @@ if (freqButtons.length && tierGrids['one-time'] && tierGrids.monthly) {
 
   function updateSummary() {
     if (summary) {
-      var freqLabel = state.freq === 'monthly' ? 'monthly gift' : 'one-time gift';
-      summary.textContent = 'Selected: ' + freqLabel + ' of $' + state.amount;
+      summary.textContent = 'Selected: gift of $' + state.amount;
     }
     if (donateBtn) {
       donateBtn.href = providerUrlForGift();
     }
-    if (monthlyHint) {
-      monthlyHint.hidden = !(DONATION_PROVIDER_URL && state.freq === 'monthly');
-    }
   }
 
-  freqButtons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      freqButtons.forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      state.freq = btn.dataset.freq;
-      showActiveGrid();
+  tierCards.forEach(function (card) {
+    card.addEventListener('click', function () {
+      tierCards.forEach(function (c) { c.classList.remove('selected'); });
+      card.classList.add('selected');
+      state.amount = amountOf(card);
       updateSummary();
     });
   });
 
-  Object.keys(tierGrids).forEach(function (freq) {
-    cardsIn(freq).forEach(function (card) {
-      card.addEventListener('click', function () {
-        cardsIn(freq).forEach(function (c) { c.classList.remove('selected'); });
-        card.classList.add('selected');
-        state.amount = amountOf(card);
-        updateSummary();
-      });
-    });
-  });
-
-  showActiveGrid();
   updateSummary();
 
   // Wix Headless checkout flow: token -> create checkout -> redirect session.
@@ -158,9 +98,8 @@ if (freqButtons.length && tierGrids['one-time'] && tierGrids.monthly) {
     if (!tokenRes.ok) throw new Error('token request failed');
     var tokenData = await tokenRes.json();
 
-    // 2. Create a checkout for this donor's chosen amount and frequency.
+    // 2. Create a checkout for this donor's chosen amount.
     var donationOptions = { amount: state.amount };
-    if (state.freq === 'monthly') donationOptions.frequency = 'MONTH';
 
     var checkoutRes = await fetch('https://www.wixapis.com/ecom/v1/checkouts', {
       method: 'POST',
